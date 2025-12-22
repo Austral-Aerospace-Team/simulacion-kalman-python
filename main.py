@@ -46,12 +46,6 @@ axs[0,1].plot(tiempos,errores)
 axs[0,1].set_title("Errores barometro")
 axs[0,1].set_ylabel("Error de medicion [m]")
 
-
-"""# Velocidad
-axs[1,0].plot(tiempos, velocities)
-axs[1,0].set_title("Tiempo vs Velocidad")
-axs[1,0].set_ylabel("Velocidad [m/s]")"""
-
 # Aceleración
 axs[1,0].plot(tiempos, acelerations)
 axs[1,0].plot(tiempos, acel_prueba, color ="red", linestyle ="dotted")
