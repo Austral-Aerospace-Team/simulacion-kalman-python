@@ -4,7 +4,7 @@ class Kalman:
 
     def __init__(self, varianza_modelo, desvio_baro, desvio_acel, delta = 0.005):
         self.T = delta
-        self.x = np.array([0,0,0])
+        self.x = np.array([440,30,10])
         self.z = np.array([0,0])
         self.model = np.array([[1,self.T, self.T**2/2],
                         [0,1,self.T],
@@ -43,6 +43,6 @@ class Kalman:
         self.x = xp + K @ y
         self.P = (np.identity(3) - K @ self.H) @ Pp
 
-        return self.x
+        return self.x[0], self.x[1], self.x[2]
 
 
