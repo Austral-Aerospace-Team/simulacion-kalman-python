@@ -2,9 +2,11 @@ import numpy as np
 
 class Kalman:
 
-    def __init__(self, varianza_modelo, desvio_baro, desvio_acel, delta = 0.005):
+    def __init__(self, desvio_modelo, desvio_baro, desvio_acel, iniciales = None,  delta = 0.005):
+        if iniciales is None:
+            iniciales = [0,0,0]
         self.T = delta
-        self.x = np.array([440,30,10])
+        self.x = np.array(iniciales)
         self.z = np.array([0,0])
         self.model = np.array([[1,self.T, self.T**2/2],
                         [0,1,self.T],
@@ -12,12 +14,12 @@ class Kalman:
         self.H = np.array([[1,0,0],
                     [0,0,1]])
         self.R = np.array([[desvio_baro**2,0],
-                           [0,desvio_acel*+2]])
-        self.Q = np.array([[0,0,0],
+                           [0,desvio_acel**2]])
+        self.Q = np.array([[desvio_modelo**2,0,0],
+                           [0,desvio_modelo**2,0],
+                           [0,0,desvio_modelo**2]])
+        self.P = np.array([[0,0,0],
                            [0,0,0],
-                           [0,0,varianza_modelo]])
-        self.P = np.array([[10,0,0],
-                           [0,10,0],
                            [0,0,10]])
 
 
@@ -42,7 +44,7 @@ class Kalman:
         ##PASO 5: CORRIJO ESTADOS
         self.x = xp + K @ y
         self.P = (np.identity(3) - K @ self.H) @ Pp
-
-        return self.x[0], self.x[1], self.x[2]
+        result = (self.x[0], self.x[1], self.x[2])
+        return xp, self.z, result
 
 

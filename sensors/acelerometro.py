@@ -8,7 +8,6 @@ class Acelerometro:
         self.bias = bias_g * g
         self.g = g
         # El MPU6050 se puede setear en 2, 4, 8 o 16g.
-        # Como el cohete llega a 140 m/s2 (14.3g), HAY usar el de 16g.
         self.rango_mpu = 16 * g
 
     def lectura(self, real_ms2):
