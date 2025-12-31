@@ -1,6 +1,6 @@
-import matplotlib.pyplot as plt
 import streamlit as st
-import numpy as np
+from Simulators.NoiseSimulator import NoiseSimulator
+from Simulators.KalmanSimulator import KalmanSimulator
 from Initializer import Initializer
 from DataReader import DataReader
 
@@ -42,30 +42,14 @@ if st.button("Empezar simulación"):
     initializer = Initializer(desvio_baro=desvio_baro, desvio_acel= desvio_acel, desvio_modelo= desvio_modelo, iniciales=iniciales)
     baro, acel, kalman = initializer.instances()
 
-    if True:
-        bar_prueba = []
-        acel_prueba = []
-        for s, v, a in zip(altitudes, velocidades, aceleraciones):
-            bar_prueba.append(baro.lectura(s, v, a))
-            acel_prueba.append(acel.lectura(a))
-
-        altFig, alt = plt.subplots()
-        alt.plot(tiempos, altitudes, label="Trayectoria Real")
-        alt.plot(tiempos, bar_prueba, label="Trayectoria Sensada", color="red", linestyle="dotted")
-        alt.set_xlabel("Tiempo (s)")
-        alt.set_ylabel("Altitud (m)")
-        alt.legend()
-        alt.grid(True)
-        st.pyplot(altFig)
-
-        accFig, acc = plt.subplots()
-        acc.plot(tiempos, aceleraciones, label="Aceleraciones Reales")
-        acc.plot(tiempos,acel_prueba, label="Aceleraciones Sensadas")
-        acc.set_xlabel("Tiempo (s)")
-        acc.set_ylabel("Aceleración (m/s^2)")
-        acc.legend()
-        acc.grid(True)
-        st.pyplot(accFig)
+    if not st.session_state.kalman:
+        simulator = NoiseSimulator()
+        figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
+        for f in figures:
+            st.pyplot(f)
+    else:
+        simulator = KalmanSimulator()
+        figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
 
 
 
