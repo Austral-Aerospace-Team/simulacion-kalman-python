@@ -29,14 +29,16 @@ class DataReader:
         tiempos = tiempos_totales[a:b]
         altitudes = datos["Altitud (m)"][a:b]
         velocities = datos["Velocidad total (m/s)"][a:b]
-        accelerations = datos["AceleraciÃ³n total (m/sÂ²)"][a:b]
+        accelerations = datos["AceleraciÃ³n vertical (m/sÂ²)"][a:b]
+        #accelerations = datos["AceleraciÃ³n total (m/sÂ²)"][a:b]
         iniciales = []
         if a == 0:
             iniciales = [0,0,0]
         else:
             iniciales.append(datos["Altitud (m)"][a-1])
             iniciales.append(datos["Velocidad total (m/s)"][a-1])
-            iniciales.append(datos["AceleraciÃ³n total (m/sÂ²)"][a-1])
+            #iniciales.append(datos["AceleraciÃ³n total (m/sÂ²)"][a-1])
+            iniciales.append(datos["AceleraciÃ³n vertical (m/sÂ²)"][a - 1])
 
         return tiempos, altitudes, velocities, accelerations, iniciales
 

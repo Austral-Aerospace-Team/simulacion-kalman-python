@@ -24,22 +24,22 @@ if apogeo:
     tiempos = datos["Tiempo (s)"][290:380]
     altitudes = datos["Altitud (m)"][290:380]
     velocities = datos["Velocidad total (m/s)"][290:380]
-    acelerations = datos["AceleraciÃ³n total (m/sÂ²)"][290:380]
+    acelerations = datos["AceleraciÃ³n vertical (m/sÂ²)"][290:380]
     iniciales.append(datos["Altitud (m)"][289])
     iniciales.append(datos["Velocidad total (m/s)"][289])
-    iniciales.append(datos["AceleraciÃ³n total (m/sÂ²)"][289])
+    iniciales.append(datos["AceleraciÃ³n vertical (m/sÂ²)"][289])
 
 else:
     tiempos = datos["Tiempo (s)"]
     altitudes = datos["Altitud (m)"]
     velocities = datos["Velocidad total (m/s)"]
-    acelerations = datos["AceleraciÃ³n total (m/sÂ²)"]
+    acelerations = datos["AceleraciÃ³n vertical (m/sÂ²)"]
     iniciales = [0,0,0]
 
 
 #Defino desvios
-desvio_baro = 2
-desvio_acel = 1
+desvio_baro = 10
+desvio_acel = 0.5
 desvio_modelo = 1
 
 
