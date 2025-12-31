@@ -50,6 +50,7 @@ if st.button("Empezar simulación"):
     else:
         simulator = KalmanSimulator()
         figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
-
+        for f in figures:
+            st.pyplot(f)
 
 
