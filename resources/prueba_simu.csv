@@ -1,8 +1,8 @@
 ﻿# Simulation 7 (Up to date),,,,,,,,
 # 648 data points written for 9 variables.,,,,,,,,
 #,,,,,,,,
-# Tiempo (s),Altitud (m),Altitude above sea level (m),Velocidad vertical (m/s),Velocidad total (m/s),AceleraciÃ³n vertical (m/sÂ²),AceleraciÃ³n total (m/sÂ²),Velocidad horizontal (m/s),AceleraciÃ³n horizontal (m/sÂ²)
-# Event IGNITION occurred at t=0 seconds,,,,,,,,
+Tiempo (s),Altitud (m),Altitude above sea level (m),Velocidad vertical (m/s),Velocidad total (m/s),AceleraciÃ³n vertical (m/sÂ²),AceleraciÃ³n total (m/sÂ²),Velocidad horizontal (m/s),AceleraciÃ³n horizontal (m/sÂ²)
+
 # Event LAUNCH occurred at t=0 seconds,,,,,,,,
 0,0,0,0,0,0,0,0,0
 "0,005","0,0004287","0,0004287","0,265","0,265","112,685","112,685","9,072E-05","0,022"
@@ -656,7 +656,7 @@
 "90,78","5,076","5,076","-4,542","5,058","-0,002","0,571","2,226","0,571"
 "91,012","4,02","4,02","-4,542","5,002","-0,015","0,062","2,094","0,06"
 "91,244","2,965","2,965","-4,546","5,011","0,008","0,372","2,107","0,372"
-"91,476","1,91","1,91","-4,544","4,973","-0,004","0,207","2,021","0,207"
+"91,476","1,91","1,91","-4,544","4,973",,"0,207","2,021","0,207"
 # Event GROUND_HIT occurred at t=91.897 seconds,,,,,,,,
 # Event SIMULATION_END occurred at t=91.897 seconds,,,,,,,,
 "91,897",0,0,"-4,546","4,94","0,01","0,376","1,934","0,376"

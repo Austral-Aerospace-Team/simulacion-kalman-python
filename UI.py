@@ -1,17 +1,61 @@
+import matplotlib.pyplot as plt
 import streamlit as st
 import numpy as np
-
+from Initializer import Initializer
+from DataReader import DataReader
 
 st.title("Bienvenido a la simulacion!")
 st.write("Veremos como el filtro de kalman actua en lecturas ruidosas del cohete volando")
 
 st.markdown("### Defini el intervalo de la simulacion")
 
-startTime = st.number_input("(Recorda que el apogeo es al segundo 9.955)", min_value=0.0, max_value=92.0, value=0.0, format="%.3f")
-endTime = st.number_input("(Recorda que termina a los 92 segundos)",min_value=0.0, max_value=92.0, value= 92.0, format="%.3f")
+intervalo = st.slider("(Recorda que el apogeo es al segundo 9.955)", min_value=0.0, max_value=92.0, value=(0.0,20.0), format="%.3f")
+#endTime = st.number_input("(Recorda que termina a los 92 segundos)",min_value=0.0, max_value=92.0, value= 92.0, format="%.3f")
+startTime, endTime = intervalo
 
 st.markdown("### Definamos los desvios de tus sensores y el modelo")
-opciones = np.arange(0.0, 30.05, 0.05).tolist()
-desvio_baro = st.select_slider("Desvío del barometro: ", options = opciones,value=10.0, format_func=lambda x: f"{x:.3f}")
-desvio_acel = st.select_slider("Desvío del acelerómetro: ",options = opciones,value=3.0, format_func=lambda x: f"{x:.3f}")
-desvio_modelo = st.select_slider("Desvío del modelo: ", options = opciones,value=3.0, format_func=lambda x: f"{x:.3f}")
+desvio_baro = st.number_input("Desvío del barometro: ",value=10.0, format="%.3f")
+desvio_acel = st.number_input("Desvío del acelerómetro: ",value=3.0, format="%.3f")
+desvio_modelo = st.number_input("Desvío del modelo: ", value=3.0, format="%.3f")
+
+# 1. Inicializamos el estado solo UNA vez al principio
+if 'kalman' not in st.session_state:
+    st.session_state.kalman = True
+
+# 2. Definimos el texto según lo que hay en memoria
+texto = "Kalman Activo" if st.session_state.kalman else "Kalman Desactivado"
+
+# 3. Usamos 'key' para que Streamlit maneje la variable solo
+st.toggle(texto, key='kalman')
+
+# 4. Lógica de tu simulación
+if st.session_state.kalman:
+    st.success("🚀 El filtro está funcionando")
+else:
+    st.error("⚠️ Datos crudos (ruido activado)")
+
+if st.button("Empezar simulación"):
+    dataReader = DataReader("resources/prueba_simu.csv")
+    tiempos, altitudes, velocidades,aceleraciones, iniciales = dataReader.read(startTime,endTime)
+
+
+    initializer = Initializer(desvio_baro=desvio_baro, desvio_acel= desvio_acel, desvio_modelo= desvio_modelo, iniciales=iniciales)
+    baro, acel, kalman = initializer.instances()
+
+    if True:
+        bar_prueba = []
+        acel_prueba = []
+        for s, v, a in zip(altitudes, velocidades, aceleraciones):
+            bar_prueba.append(baro.lectura(s, v, a))
+            acel_prueba.append(acel.lectura(a))
+
+        fig, ax = plt.subplots()
+        ax.plot(tiempos, altitudes, label= "Trayectoria Real")
+        ax.plot(tiempos, bar_prueba, label= "Trayectoria Sensada", color="red", linestyle="dotted")
+        ax.set_xlabel("Tiempo (s)")
+        ax.set_ylabel("Altitud (m)")
+        ax.legend()
+        ax.grid(True)
+        st.pyplot(fig)
+
+
