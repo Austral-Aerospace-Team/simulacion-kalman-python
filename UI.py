@@ -4,6 +4,8 @@ from src.Simulators.KalmanSimulator import KalmanSimulator
 from src.Initializer import Initializer
 from src.DataReader import DataReader
 
+st.set_page_config(layout='wide')
+
 if 'ejecutado' not in st.session_state:
     st.session_state.ejecutado = False
     st.session_state.datos_simu = None
@@ -18,9 +20,13 @@ intervalo = st.slider("(Recorda que el apogeo es al segundo 9.955)", min_value=0
 startTime, endTime = intervalo
 
 st.markdown("### Definamos los desvios de tus sensores y el modelo")
-desvio_baro = st.number_input("Desvío del barometro: ",value=10.0, format="%.3f")
-desvio_acel = st.number_input("Desvío del acelerómetro: ",value=3.0, format="%.3f")
-desvio_modelo = st.number_input("Desvío del modelo: ", value=3.0, format="%.3f")
+b,a,k = st.columns([1,1,1])
+with b:
+    desvio_baro = st.number_input("Desvío del barometro: ",value=10.0, format="%.3f")
+with a:
+    desvio_acel = st.number_input("Desvío del acelerómetro: ",value=3.0, format="%.3f")
+with k:
+    desvio_modelo = st.number_input("Desvío del modelo: ", value=3.0, format="%.3f")
 
 # 1. Inicializamos el estado solo UNA vez al principio
 if 'kalman' not in st.session_state:
