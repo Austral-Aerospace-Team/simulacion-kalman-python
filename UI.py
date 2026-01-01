@@ -49,8 +49,30 @@ if st.button("Empezar simulación"):
             st.pyplot(f)
     else:
         simulator = KalmanSimulator()
-        figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
-        for f in figures:
-            st.pyplot(f)
+        col_grafico, col_controles = st.columns([3, 1])
+        with col_controles:
+            st.markdown("### Ver líneas")
+            # Creamos un checkbox por cada línea y guardamos su estado (True/False)
+            ver_real = st.checkbox("Altura Real", value=True)
+            ver_kalman = st.checkbox("Altura Kalman", value=True)
+            ver_predicha = st.checkbox("Altura Predicha", value=True)
+            ver_sensada = st.checkbox("Altura Sensada", value=True)
+        with col_grafico:
+            figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
+            axs = figures[0].axes[0]
+            if not ver_sensada:
+                del axs.lines[3]
+            if not ver_predicha:
+                del axs.lines[2]
+            if not ver_kalman:
+                del axs.lines[1]
+            if not ver_kalman:
+                del axs.lines[0]
+            axs.legend()
+            for f in figures:
+                st.pyplot(f)
+
+
+
 
 
