@@ -3,10 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sensors.barometro import Barometro
 from sensors.acelerometro import Acelerometro
-from kalman import Kalman
+from src.kalman import Kalman
 
 # Leer CSV (ignora comentarios)
-datos = pan.read_csv("resources/prueba_simu.csv", comment="#", decimal=',')
+datos = pan.read_csv("../resources/prueba_simu.csv", comment="#", decimal=',')
 
 
 #Defino que analizo

@@ -1,4 +1,4 @@
-from Simulators.Simulator import Simulator
+from src.Simulators.Simulator import Simulator
 import matplotlib.pyplot as plt
 
 class KalmanSimulator(Simulator):

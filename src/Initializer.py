@@ -1,6 +1,6 @@
-from sensors.barometro import Barometro
-from sensors.acelerometro import Acelerometro
-from kalman import Kalman
+from src.sensors.barometro import Barometro
+from src.sensors.acelerometro import Acelerometro
+from src.kalman import Kalman
 class Initializer:
     def __init__(self, iniciales=None, desvio_baro = 2, desvio_acel = 1, desvio_modelo = 1):
         if iniciales is None:

@@ -1,8 +1,8 @@
 import streamlit as st
-from Simulators.NoiseSimulator import NoiseSimulator
-from Simulators.KalmanSimulator import KalmanSimulator
-from Initializer import Initializer
-from DataReader import DataReader
+from src.Simulators.NoiseSimulator import NoiseSimulator
+from src.Simulators.KalmanSimulator import KalmanSimulator
+from src.Initializer import Initializer
+from src.DataReader import DataReader
 
 st.title("Bienvenido a la simulacion!")
 st.write("Veremos como el filtro de kalman actua en lecturas ruidosas del cohete volando")
