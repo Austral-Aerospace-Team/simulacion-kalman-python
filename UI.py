@@ -4,6 +4,10 @@ from src.Simulators.KalmanSimulator import KalmanSimulator
 from src.Initializer import Initializer
 from src.DataReader import DataReader
 
+if 'ejecutado' not in st.session_state:
+    st.session_state.ejecutado = False
+    st.session_state.datos_simu = None
+
 st.title("Bienvenido a la simulacion!")
 st.write("Veremos como el filtro de kalman actua en lecturas ruidosas del cohete volando")
 
@@ -34,44 +38,58 @@ if st.session_state.kalman:
 else:
     st.error("⚠️ Datos crudos (ruido activado)")
 
+# --- Lógica del Botón ---
 if st.button("Empezar simulación"):
     dataReader = DataReader("resources/prueba_simu.csv")
-    tiempos, altitudes, velocidades,aceleraciones, iniciales = dataReader.read(startTime,endTime)
+    tiempos, altitudes, velocidades, aceleraciones, iniciales = dataReader.read(startTime, endTime)
 
-
-    initializer = Initializer(desvio_baro=desvio_baro, desvio_acel= desvio_acel, desvio_modelo= desvio_modelo, iniciales=iniciales)
+    initializer = Initializer(desvio_baro=desvio_baro, desvio_acel=desvio_acel, desvio_modelo=desvio_modelo,
+                              iniciales=iniciales)
     baro, acel, kalman = initializer.instances()
+
+    # Guardamos los objetos necesarios para simular
+    st.session_state.ejecutado = True
+    st.session_state.sim_params = (baro, acel, kalman, tiempos, altitudes, velocidades, aceleraciones)
+
+# --- Mostrar resultados (Fuera del if st.button) ---
+if st.session_state.ejecutado:
+    baro, acel, kalman, tiempos, altitudes, velocidades, aceleraciones = st.session_state.sim_params
 
     if not st.session_state.kalman:
         simulator = NoiseSimulator()
-        figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
+        figures = simulator.simulate(baro, acel, kalman, tiempos, altitudes, velocidades, aceleraciones)
         for f in figures:
             st.pyplot(f)
     else:
         simulator = KalmanSimulator()
         col_grafico, col_controles = st.columns([3, 1])
+
         with col_controles:
             st.markdown("### Ver líneas")
-            # Creamos un checkbox por cada línea y guardamos su estado (True/False)
-            ver_real = st.checkbox("Altura Real", value=True)
-            ver_kalman = st.checkbox("Altura Kalman", value=True)
-            ver_predicha = st.checkbox("Altura Predicha", value=True)
-            ver_sensada = st.checkbox("Altura Sensada", value=True)
+            v_real = st.checkbox("Altura Real", value=True)
+            v_kalman = st.checkbox("Altura Kalman", value=True)
+            v_predicha = st.checkbox("Altura Predicha", value=True)
+            v_sensada = st.checkbox("Altura Sensada", value=True)
+
         with col_grafico:
-            figures = simulator.simulate(baro,acel,kalman,tiempos, altitudes, velocidades, aceleraciones)
-            axs = figures[0].axes[0]
-            if not ver_sensada:
-                del axs.lines[3]
-            if not ver_predicha:
-                del axs.lines[2]
-            if not ver_kalman:
-                del axs.lines[1]
-            if not ver_kalman:
-                del axs.lines[0]
-            axs.legend()
+            figures = simulator.simulate(baro, acel, kalman, tiempos, altitudes, velocidades, aceleraciones)
+            ax = figures[0].axes[0]
+
+            # NOTA IMPORTANTE: Usamos etiquetas para encontrar y borrar líneas
+            # Esto evita el error de índices que cambian al borrar
+            lineas_a_borrar = []
+            if not v_real: lineas_a_borrar.append("Altura Real")
+            if not v_kalman: lineas_a_borrar.append("Altura Kalman")
+            if not v_predicha: lineas_a_borrar.append("Altura Predicha")
+            if not v_sensada: lineas_a_borrar.append("Altura Sensada")
+
+            for line in ax.lines[:]:  # Copia de la lista para iterar seguro
+                if line.get_label() in lineas_a_borrar:
+                    line.remove()
+
+            ax.legend()
             for f in figures:
                 st.pyplot(f)
-
 
 
 
