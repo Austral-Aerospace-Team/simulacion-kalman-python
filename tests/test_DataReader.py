@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd  # type: ignore
 from src.DataReader import DataReader # Asumiendo que tu clase está en data_reader.py
 
 def test_extraer_intervalo_debe_devolver_indices_correctos():

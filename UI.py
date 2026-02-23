@@ -1,6 +1,7 @@
 import streamlit as st
 from src.Simulators.NoiseSimulator import NoiseSimulator
 from src.Simulators.KalmanSimulator import KalmanSimulator
+from src.Simulators.KalmanLR import KalmanLR
 from src.Initializer import Initializer
 from src.DataReader import DataReader
 
@@ -67,7 +68,7 @@ if st.session_state.ejecutado:
         for f in figures:
             st.pyplot(f)
     else:
-        simulator = KalmanSimulator()
+        simulator = KalmanLR()  # type: ignore
         col_grafico, col_controles = st.columns([3, 1])
 
         with col_controles:
